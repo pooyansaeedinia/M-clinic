@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-chip">Aesthetic Excellence</div>
+    <h1>Advanced Techniques. Natural Results.</h1>
+    <p>
+        {% if current_lang == 'tr' %}
+            Estetik islemleri premium bir deneyimle kesfedin. Her islemde uzman planlama, once/sonra ornekleri ve detayli aciklama sunuyoruz.
+        {% else %}
+            Explore aesthetic procedures through a premium clinic experience with expert planning, before/after galleries, and detailed guidance.
+        {% endif %}
+    </p>
+</section>
+
+<h2 class="section-title">{{ texts.procedures }}</h2>
+<section class="grid">
+    {% for card in cards %}
+        <article class="card card-clickable">
+            <a href="{% url 'procedure_detail' card.slug %}" class="card-stretched-link" aria-label="{{ card.name }}"></a>
+            <img src="{{ card.default_image.url }}" alt="{{ card.name }}">
+            <div class="card-content">
+                <span class="card-kicker">Procedure</span>
+                <h3>{{ card.name }}</h3>
+                <p>{{ card.summary|truncatechars:110 }}</p>
+                <div class="card-footer">
+                    <span class="card-link-text">{{ texts.view_details }} →</span>
+                </div>
+            </div>
+        </article>
+    {% empty %}
+        <p>
+            {% if current_lang == 'tr' %}
+                Henuz islem eklenmedi.
+            {% else %}
+                No procedures available yet.
+            {% endif %}
+        </p>
+    {% endfor %}
+</section>
+{% endblock %}

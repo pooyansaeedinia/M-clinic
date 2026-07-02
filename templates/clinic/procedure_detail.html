@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-detail-head">
+        <div>
+            <div class="hero-chip">Signature Procedure</div>
+            <h1>{{ name }}</h1>
+        </div>
+        {% if user.is_authenticated %}
+            <div class="hero-actions">
+                <button type="button" class="btn btn-outline" data-open-modal="add-surgery-modal">{{ texts.add_images }}</button>
+                <a class="btn btn-outline" href="{% url 'edit_procedure' procedure.slug %}">{{ texts.edit_procedure }}</a>
+                <form method="post" action="{% url 'delete_procedure' procedure.slug %}" onsubmit="return confirm('{{ texts.confirm_delete }}');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">{{ texts.delete_procedure }}</button>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<h2 class="section-title">{{ texts.before_after }}</h2>
+{% if samples %}
+    <section class="detail-grid">
+        {% for sample in samples %}
+            <article class="image-panel">
+                <div class="image-pair">
+                    <div class="image-col">
+                        <span class="image-label">{{ texts.before }}</span>
+                        <img
+                            src="{{ sample.before_image.url }}"
+                            alt="before {{ name }}"
+                            class="zoomable-image js-zoomable"
+                            data-before="{{ sample.before_image.url }}"
+                            data-after="{{ sample.after_image.url }}"
+                            data-title="{{ name }}"
+                            data-initial="before"
+                        >
+                    </div>
+                    <div class="image-col">
+                        <span class="image-label">{{ texts.after }}</span>
+                        <img
+                            src="{{ sample.after_image.url }}"
+                            alt="after {{ name }}"
+                            class="zoomable-image js-zoomable"
+                            data-before="{{ sample.before_image.url }}"
+                            data-after="{{ sample.after_image.url }}"
+                            data-title="{{ name }}"
+                            data-initial="after"
+                        >
+                    </div>
+                </div>
+                {% if user.is_authenticated %}
+                    <div class="sample-actions">
+                        <a class="btn btn-outline btn-small" href="{% url 'edit_procedure_image' procedure.slug sample.id %}">{{ texts.edit_image }}</a>
+                        <form method="post" action="{% url 'delete_procedure_image' procedure.slug sample.id %}" onsubmit="return confirm('{{ texts.confirm_delete }}');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-small">{{ texts.delete_image }}</button>
+                        </form>
+                    </div>
+                {% endif %}
+            </article>
+        {% endfor %}
+    </section>
+{% else %}
+    <p>{{ texts.no_samples }}</p>
+{% endif %}
+
+<h2 class="section-title">{{ texts.about_procedure }}</h2>
+<article class="description-box">
+    {{ summary|linebreaks }}
+</article>
+{% endblock %}

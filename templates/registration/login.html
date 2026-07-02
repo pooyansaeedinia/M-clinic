@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="auth-layout">
+    <article class="auth-info">
+        <span class="hero-chip">Member Access</span>
+        <h1 class="auth-title">
+            {% if current_lang == 'tr' %}
+                Klinik yonetim paneline guvenli giris
+            {% else %}
+                Secure access to clinic management
+            {% endif %}
+        </h1>
+        <p>
+            {% if current_lang == 'tr' %}
+                Islem ve once/sonra galerilerini yonetmek icin hesabinizla giris yapin.
+            {% else %}
+                Sign in with your account to manage procedures and before/after galleries.
+            {% endif %}
+        </p>
+    </article>
+
+    <section class="form-card auth-card">
+        <h2>{{ texts.login }}</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="form-actions">
+                <button class="btn btn-primary" type="submit">{{ texts.login }}</button>
+            </div>
+        </form>
+    </section>
+</section>
+{% endblock %}

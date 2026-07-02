@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="section-title">
+    {% if mode == 'edit' %}
+        {{ texts.edit_image }}
+    {% else %}
+        {{ texts.add_images }}
+    {% endif %}
+    - {{ procedure_name }}
+</h1>
+<section class="form-card">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="form-actions">
+            <button class="btn btn-primary" type="submit">
+                {% if mode == 'edit' %}{{ texts.update }}{% else %}{{ texts.save }}{% endif %}
+            </button>
+            <a class="btn btn-ghost" href="{% url 'procedure_detail' procedure.slug %}">{{ texts.cancel }}</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

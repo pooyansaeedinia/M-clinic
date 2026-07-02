@@ -1,0 +1,35 @@
+{% if user.is_authenticated and procedure_form %}
+<div class="app-modal" id="add-procedure-modal" hidden>
+    <div class="app-modal-backdrop" data-close-modal></div>
+    <div class="app-modal-dialog">
+        <button type="button" class="app-modal-close" data-close-modal>&times;</button>
+        <h3>{{ texts.add_procedure }}</h3>
+        <form method="post" action="{% url 'add_procedure' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ procedure_form.as_p }}
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">{{ texts.save }}</button>
+                <button type="button" class="btn btn-ghost" data-close-modal>{{ texts.cancel }}</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+{% if user.is_authenticated and image_form and procedure %}
+<div class="app-modal" id="add-surgery-modal" hidden>
+    <div class="app-modal-backdrop" data-close-modal></div>
+    <div class="app-modal-dialog">
+        <button type="button" class="app-modal-close" data-close-modal>&times;</button>
+        <h3>{{ texts.add_images }}</h3>
+        <form method="post" action="{% url 'add_procedure_image' procedure.slug %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ image_form.as_p }}
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">{{ texts.save }}</button>
+                <button type="button" class="btn btn-ghost" data-close-modal>{{ texts.cancel }}</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}

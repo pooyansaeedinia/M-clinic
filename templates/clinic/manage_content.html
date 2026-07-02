@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-detail-head">
+        <div>
+            <div class="hero-chip">Admin</div>
+            <h1>{{ texts.content_dashboard }}</h1>
+        </div>
+        <button type="button" class="btn btn-primary" data-open-modal="add-procedure-modal">{{ texts.add_procedure }}</button>
+    </div>
+</section>
+
+<section class="grid">
+    {% for item in items %}
+        <article class="card card-clickable">
+            <a href="{% url 'procedure_detail' item.slug %}" class="card-stretched-link" aria-label="{{ item.name }}"></a>
+            <img src="{{ item.default_image.url }}" alt="{{ item.name }}">
+            <div class="card-content">
+                <h3>{{ item.name }}</h3>
+                <p>{{ texts.gallery_count }}: {{ item.gallery_count }}</p>
+                <div class="card-footer">
+                    <span class="card-link-text">{{ texts.view_details }} →</span>
+                    <a class="card-action-link" href="{% url 'edit_procedure' item.slug %}">{{ texts.edit_procedure }}</a>
+                </div>
+            </div>
+        </article>
+    {% empty %}
+        <p>No content yet.</p>
+    {% endfor %}
+</section>
+{% endblock %}
