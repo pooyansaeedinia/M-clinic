@@ -8,8 +8,6 @@ venv/
 env/
 .venv/
 
-# Media
-media/
 
 # Static collected
 staticfiles/
