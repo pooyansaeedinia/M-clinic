@@ -1,6 +1,6 @@
 ---
 description: MediClinic UI/UX design language — follow DESIGN-LANGUAGE.md for all frontend work
-globs: templates/**/*.html,clinic/static/clinic/**/*
+globs: templates/**/*.html,static/**/*
 alwaysApply: false
 ---
 
@@ -11,7 +11,7 @@ alwaysApply: false
 ## Quick Rules
 
 - **Fonts:** Montserrat (headings) + Inter (body). No script/serif heading fonts.
-- **Colors:** Use `:root` tokens in `clinic/static/clinic/styles.css`
+- **Colors:** Use `:root` tokens in `static/clinic/styles.css`
   - Primary Blue `#3FA9F5` — accents, links, focus (not primary button fill)
   - Gold `#F5B94C` — chips, hover accents (5% of UI)
   - Navy `#1A2D4D` / `#10233F` — header, footer, hero, primary buttons
@@ -19,7 +19,7 @@ alwaysApply: false
 - **Layout:** `--page-gutter: clamp(24px, 5vw, 48px)`, max-width 1120px, sticky footer flex column
 - **Gallery:** 3 sections per row (`.pairs-grid`); each section has Before + After with multiple titled images
 - **i18n:** All UI strings in `clinic/context_processors.py` → `UI_TEXTS` (en + tr)
-- **Flags:** SVG in `clinic/static/clinic/flags/`, not emoji
+- **Flags:** SVG in `static/clinic/flags/`, not emoji
 - **Modals/lightbox:** Must hide with `[hidden] { display: none !important }`
 - **Motion:** Keep starfield + page-glow subtle; hover lift on cards/buttons
 

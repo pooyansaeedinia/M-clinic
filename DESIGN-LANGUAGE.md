@@ -2,7 +2,7 @@
 
 This document defines the UI/UX design language for **MediClinic** — a premium aesthetic surgery clinic web application. All future UI work must follow these guidelines to keep the product visually consistent.
 
-**Source of truth for tokens:** `clinic/static/clinic/styles.css`  
+**Source of truth for tokens:** `static/clinic/styles.css`  
 **Base layout:** `templates/base.html`
 
 ---
@@ -250,7 +250,7 @@ Procedure
 - All UI strings live in `clinic/context_processors.py` → `UI_TEXTS`
 - Templates use `{{ texts.key }}` — never hardcode user-facing strings in HTML
 - Content fields are bilingual: `name_en` / `name_tr`, `title_en` / `title_tr`, `summary_en` / `summary_tr`
-- Flags: SVG assets in `clinic/static/clinic/flags/en.svg` and `tr.svg`
+- Flags: SVG assets in `static/clinic/flags/en.svg` and `tr.svg`
 
 ---
 
@@ -331,7 +331,7 @@ templates/
   clinic/partials/gallery_upload_fields.html
   registration/login.html     # Auth split layout
 
-clinic/static/clinic/
+static/clinic/
   styles.css                  # All design tokens & components
   lightbox.js
   modal.js

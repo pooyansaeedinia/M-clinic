@@ -63,7 +63,7 @@ That document defines:
 - Bilingual content fields: `*_en` and `*_tr` suffixes
 - UI strings: `clinic/context_processors.py` → `UI_TEXTS` (never hardcode in templates)
 - Auth-required views: `@login_required` decorator
-- Static files: `clinic/static/clinic/`
+- Static files: `static/clinic/` (project root — no collectstatic needed in development)
 
 ### Templates
 
@@ -75,13 +75,13 @@ That document defines:
 
 ### CSS
 
-- Single stylesheet: `clinic/static/clinic/styles.css`
+- Single stylesheet: `static/clinic/styles.css`
 - Define new colors as `:root` CSS variables first
 - Match existing class naming (`.btn-*`, `.hero`, `.card`, `.pair-section`, etc.)
 
 ### JavaScript
 
-- Vanilla JS only in `clinic/static/clinic/`
+- Vanilla JS only in `static/clinic/`
 - Modals must respect `[hidden]` attribute (see DESIGN-LANGUAGE.md §6.6)
 - Gallery form field naming: `s{section}_{b|a}{index}_{field}` — map `b`→`before`, `a`→`after` in backend
 
@@ -100,7 +100,7 @@ Each **section** has two parts (Before / After). Each part can contain **multipl
 - Languages: `en`, `tr`
 - Switch URL: `/set-language/{code}/?next={path}`
 - Session key: `lang`
-- Flag icons: SVG at `clinic/static/clinic/flags/en.svg` and `tr.svg`
+- Flag icons: SVG at `static/clinic/flags/en.svg` and `tr.svg`
 
 ## UI Change Checklist
 
@@ -121,6 +121,28 @@ When modifying frontend:
 - Do not commit `.env` or secrets
 - Do not create git commits unless the user asks
 - Do not add markdown/docs files unless requested (except this file and DESIGN-LANGUAGE.md)
+
+## Static Files
+
+All static assets live in the project root:
+
+```
+static/
+  clinic/
+    styles.css
+    lightbox.js
+    modal.js
+    gallery-form.js
+    flags/en.svg, tr.svg
+```
+
+**Settings (`M_clinic_2/settings.py`):**
+- `STATIC_URL = '/static/'`
+- `STATICFILES_DIRS = [BASE_DIR / 'static']`
+
+In development (`DEBUG=True`), static files are served directly from `static/` — **no `collectstatic` needed**.
+
+Templates still use: `{% static 'clinic/styles.css' %}`
 
 ## Allowed Hosts
 
