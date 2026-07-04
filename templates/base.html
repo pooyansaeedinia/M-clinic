@@ -58,9 +58,13 @@
                 <button type="button" class="mode-btn active" data-lightbox-mode="before">Before</button>
                 <button type="button" class="mode-btn" data-lightbox-mode="after">After</button>
             </div>
-            <img id="lightbox-image" src="" alt="">
+            <div class="lightbox-nav">
+                <button type="button" class="lightbox-arrow" data-lightbox-prev>&larr;</button>
+                <img id="lightbox-image" src="" alt="">
+                <button type="button" class="lightbox-arrow" data-lightbox-next>&rarr;</button>
+            </div>
             <p id="lightbox-caption" class="lightbox-caption"></p>
-            <p class="lightbox-help">Use mouse wheel to switch Before/After</p>
+            <p class="lightbox-help">Scroll or use arrows to browse previous/next case</p>
         </div>
     </div>
 
@@ -72,5 +76,6 @@
     </footer>
     <script src="{% static 'clinic/lightbox.js' %}"></script>
     <script src="{% static 'clinic/modal.js' %}"></script>
+    <script src="{% static 'clinic/gallery-form.js' %}"></script>
 </body>
 </html>

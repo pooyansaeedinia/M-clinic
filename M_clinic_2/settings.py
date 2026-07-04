@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = os.getenv(
     'DJANGO_ALLOWED_HOSTS',
-    '127.0.0.1,localhost,testserver',
+    '127.0.0.1,localhost,testserver,nasimmehrzad.com',
 ).split(',')
 
 

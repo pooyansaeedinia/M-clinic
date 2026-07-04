@@ -16,16 +16,18 @@
 </div>
 {% endif %}
 
-{% if user.is_authenticated and image_form and procedure %}
+{% if user.is_authenticated and procedure %}
 <div class="app-modal" id="add-surgery-modal" hidden>
     <div class="app-modal-backdrop" data-close-modal></div>
-    <div class="app-modal-dialog">
+    <div class="app-modal-dialog app-modal-dialog-wide">
         <button type="button" class="app-modal-close" data-close-modal>&times;</button>
         <h3>{{ texts.add_images }}</h3>
-        <form method="post" action="{% url 'add_procedure_image' procedure.slug %}" enctype="multipart/form-data">
+        <form method="post" action="{% url 'add_procedure_image' procedure.slug %}" enctype="multipart/form-data" class="gallery-upload-form">
             {% csrf_token %}
-            {{ image_form.as_p }}
+            {% include 'clinic/partials/gallery_upload_fields.html' %}
+            <p class="form-hint">{{ texts.nested_upload_hint }}</p>
             <div class="form-actions">
+                <button type="button" class="btn btn-outline" id="add-gallery-section">{{ texts.add_section }}</button>
                 <button type="submit" class="btn btn-primary">{{ texts.save }}</button>
                 <button type="button" class="btn btn-ghost" data-close-modal>{{ texts.cancel }}</button>
             </div>

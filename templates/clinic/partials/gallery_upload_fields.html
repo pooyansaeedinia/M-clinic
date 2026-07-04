@@ -1,0 +1,29 @@
+<div class="gallery-sections" id="gallery-sections">
+    <div class="section-block">
+        <h4 class="section-block-title"><span class="section-label">{{ texts.section_label }}</span> <span class="section-number">1</span></h4>
+        <div class="section-part">
+            <h5>{{ texts.before }}</h5>
+            <div class="media-rows before-rows">
+                <div class="media-row">
+                    <input type="text" data-field="title_en" placeholder="{{ texts.title_en_label }}" required>
+                    <input type="text" data-field="title_tr" placeholder="{{ texts.title_tr_label }}">
+                    <input type="file" data-field="image" accept="image/*" required>
+                    <button type="button" class="btn btn-ghost btn-small remove-media-row">{{ texts.remove_row }}</button>
+                </div>
+            </div>
+            <button type="button" class="btn btn-outline btn-small add-before-row">{{ texts.add_before_image }}</button>
+        </div>
+        <div class="section-part">
+            <h5>{{ texts.after }}</h5>
+            <div class="media-rows after-rows">
+                <div class="media-row">
+                    <input type="text" data-field="title_en" placeholder="{{ texts.title_en_label }}" required>
+                    <input type="text" data-field="title_tr" placeholder="{{ texts.title_tr_label }}">
+                    <input type="file" data-field="image" accept="image/*" required>
+                    <button type="button" class="btn btn-ghost btn-small remove-media-row">{{ texts.remove_row }}</button>
+                </div>
+            </div>
+            <button type="button" class="btn btn-outline btn-small add-after-row">{{ texts.add_after_image }}</button>
+        </div>
+    </div>
+</div>

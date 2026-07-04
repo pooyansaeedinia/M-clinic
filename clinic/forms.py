@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Procedure, ProcedureImage
+from .models import GallerySection, Procedure, SectionImage
 
 
 class ProcedureForm(forms.ModelForm):
@@ -24,14 +24,18 @@ class ProcedureForm(forms.ModelForm):
         }
 
 
-class ProcedureImageForm(forms.ModelForm):
+class SectionImageForm(forms.ModelForm):
     class Meta:
-        model = ProcedureImage
+        model = SectionImage
         fields = [
-            'before_image',
-            'after_image',
+            'title_en',
+            'title_tr',
+            'image',
+            'image_type',
         ]
         labels = {
-            'before_image': 'Before Image',
-            'after_image': 'After Image',
+            'title_en': 'Title (English)',
+            'title_tr': 'Title (Turkish)',
+            'image': 'Image',
+            'image_type': 'Type',
         }
