@@ -50,22 +50,57 @@
     </main>
     {% include 'clinic/partials/modals.html' %}
 
-    <div id="image-lightbox" class="lightbox" hidden>
+    <div
+        id="image-lightbox"
+        class="lightbox"
+        hidden
+        data-empty-before="{{ texts.no_before_in_section }}"
+        data-empty-after="{{ texts.no_after_in_section }}"
+    >
         <div class="lightbox-backdrop" data-close-lightbox></div>
-        <div class="lightbox-dialog" role="dialog" aria-modal="true" aria-label="Image Preview">
-            <button type="button" class="lightbox-close" data-close-lightbox>&times;</button>
-            <div class="lightbox-toolbar">
-                <button type="button" class="mode-btn active" data-lightbox-mode="before">Before</button>
-                <button type="button" class="mode-btn" data-lightbox-mode="after">After</button>
-            </div>
-            <div class="lightbox-nav">
-                <button type="button" class="lightbox-arrow" data-lightbox-prev>&larr;</button>
-                <img id="lightbox-image" src="" alt="">
-                <button type="button" class="lightbox-arrow" data-lightbox-next>&rarr;</button>
-            </div>
-            <p id="lightbox-caption" class="lightbox-caption"></p>
-            <p class="lightbox-help">Scroll or use arrows to browse previous/next case</p>
+        <div class="lightbox-ambient" aria-hidden="true">
+            <span class="lightbox-orb lightbox-orb-blue"></span>
+            <span class="lightbox-orb lightbox-orb-gold"></span>
         </div>
+        <div class="lightbox-panel" role="dialog" aria-modal="true" aria-label="{{ texts.before_after }}">
+            <div class="lightbox-panel-glow" aria-hidden="true"></div>
+            <header class="lightbox-header">
+                <div class="lightbox-header-main">
+                    <span class="lightbox-kicker">{{ texts.before_after }}</span>
+                    <div class="lightbox-toolbar">
+                        <button type="button" class="mode-btn active" data-lightbox-mode="before">{{ texts.before }}</button>
+                        <button type="button" class="mode-btn" data-lightbox-mode="after">{{ texts.after }}</button>
+                    </div>
+                    <span class="lightbox-counter" id="lightbox-counter" hidden></span>
+                </div>
+                <button type="button" class="lightbox-close" data-close-lightbox aria-label="{{ texts.close }}">
+                    <span class="modal-close-icon modal-close-icon--light" aria-hidden="true"></span>
+                </button>
+            </header>
+            <div class="lightbox-scroll" id="lightbox-scroll-area"></div>
+        </div>
+    </div>
+
+    <div id="image-preview-lightbox" class="image-preview" hidden>
+        <div class="image-preview-backdrop" data-close-preview></div>
+        <div class="image-preview-ambient" aria-hidden="true">
+            <span class="image-preview-orb image-preview-orb-blue"></span>
+            <span class="image-preview-orb image-preview-orb-gold"></span>
+        </div>
+        <figure class="image-preview-dialog" role="dialog" aria-modal="true" aria-label="{{ texts.case_preview }}">
+            <header class="image-preview-header">
+                <figcaption id="image-preview-caption" class="image-preview-caption"></figcaption>
+                <button type="button" class="image-preview-close" data-close-preview aria-label="{{ texts.close }}">
+                    <span class="modal-close-icon" aria-hidden="true"></span>
+                </button>
+            </header>
+            <div class="image-preview-content">
+                <div class="image-preview-frame">
+                    <img id="image-preview-img" src="" alt="">
+                </div>
+                <div id="image-preview-actions" class="image-preview-actions" hidden></div>
+            </div>
+        </figure>
     </div>
 
     <footer class="site-footer">
@@ -75,6 +110,7 @@
         </div>
     </footer>
     <script src="{% static 'clinic/lightbox.js' %}"></script>
+    <script src="{% static 'clinic/procedure-search.js' %}"></script>
     <script src="{% static 'clinic/modal.js' %}"></script>
     <script src="{% static 'clinic/gallery-form.js' %}"></script>
 </body>

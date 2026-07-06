@@ -22,79 +22,47 @@
 
 <h2 class="section-title">{{ texts.before_after }}</h2>
 {% if has_gallery %}
-    <section class="pairs-grid">
+    <section class="cases-grid">
         {% for section in gallery_sections %}
-            <article class="pair-section" data-section-index="{{ forloop.counter0 }}">
-                <h3 class="pair-title">{{ texts.section_label }} {{ forloop.counter }}</h3>
-                <div class="pair-images">
-                    <div class="pair-side">
+            <article
+                class="case-card js-case-card"
+                data-section-index="{{ forloop.counter0 }}"
+                role="button"
+                tabindex="0"
+                aria-label="{{ texts.case_preview }} — {{ texts.section_label }} {{ forloop.counter }}"
+            >
+                <h3 class="case-card-title">{{ texts.section_label }} {{ forloop.counter }}</h3>
+                <div class="case-card-preview">
+                    <div class="case-preview-side">
                         <span class="image-label">{{ texts.before }}</span>
-                        <div class="side-gallery-grid">
-                            {% for item in section.before_items %}
-                                <div class="side-gallery-item">
-                                    <p class="image-item-title">{{ item.title }}</p>
-                                    <div class="gallery-thumb">
-                                        <img
-                                            src="{{ item.image.url }}"
-                                            alt="{{ item.title }}"
-                                            class="js-gallery-trigger"
-                                            data-section-index="{{ forloop.parentloop.counter0 }}"
-                                            data-slide-index="{{ forloop.counter0 }}"
-                                            data-mode="before"
-                                            data-title="{{ item.title }}"
-                                        >
-                                    </div>
-                                    {% if user.is_authenticated %}
-                                        <div class="sample-actions">
-                                            <a class="btn btn-outline btn-small" href="{% url 'edit_procedure_image' procedure.slug item.id %}">{{ texts.edit_image }}</a>
-                                            <form method="post" action="{% url 'delete_procedure_image' procedure.slug item.id %}" onsubmit="return confirm('{{ texts.confirm_delete }}');">
-                                                {% csrf_token %}
-                                                <button type="submit" class="btn btn-danger btn-small">{{ texts.delete_image }}</button>
-                                            </form>
-                                        </div>
-                                    {% endif %}
+                        {% with first=section.before_items.0 %}
+                            {% if first %}
+                                <div class="gallery-thumb">
+                                    <img src="{{ first.image.url }}" alt="{{ first.title }}" loading="lazy">
                                 </div>
-                            {% empty %}
-                                <p class="gallery-empty">{{ texts.no_before_in_section }}</p>
-                            {% endfor %}
-                        </div>
+                            {% else %}
+                                <div class="gallery-thumb gallery-thumb-empty">{{ texts.no_before_in_section }}</div>
+                            {% endif %}
+                        {% endwith %}
                     </div>
-                    <div class="pair-side">
+                    <div class="case-preview-side">
                         <span class="image-label">{{ texts.after }}</span>
-                        <div class="side-gallery-grid">
-                            {% for item in section.after_items %}
-                                <div class="side-gallery-item">
-                                    <p class="image-item-title">{{ item.title }}</p>
-                                    <div class="gallery-thumb">
-                                        <img
-                                            src="{{ item.image.url }}"
-                                            alt="{{ item.title }}"
-                                            class="js-gallery-trigger"
-                                            data-section-index="{{ forloop.parentloop.counter0 }}"
-                                            data-slide-index="{{ forloop.counter0 }}"
-                                            data-mode="after"
-                                            data-title="{{ item.title }}"
-                                        >
-                                    </div>
-                                    {% if user.is_authenticated %}
-                                        <div class="sample-actions">
-                                            <a class="btn btn-outline btn-small" href="{% url 'edit_procedure_image' procedure.slug item.id %}">{{ texts.edit_image }}</a>
-                                            <form method="post" action="{% url 'delete_procedure_image' procedure.slug item.id %}" onsubmit="return confirm('{{ texts.confirm_delete }}');">
-                                                {% csrf_token %}
-                                                <button type="submit" class="btn btn-danger btn-small">{{ texts.delete_image }}</button>
-                                            </form>
-                                        </div>
-                                    {% endif %}
+                        {% with first=section.after_items.0 %}
+                            {% if first %}
+                                <div class="gallery-thumb">
+                                    <img src="{{ first.image.url }}" alt="{{ first.title }}" loading="lazy">
                                 </div>
-                            {% empty %}
-                                <p class="gallery-empty">{{ texts.no_after_in_section }}</p>
-                            {% endfor %}
-                        </div>
+                            {% else %}
+                                <div class="gallery-thumb gallery-thumb-empty">{{ texts.no_after_in_section }}</div>
+                            {% endif %}
+                        {% endwith %}
                     </div>
                 </div>
             </article>
         {% endfor %}
     </section>
+    {{ gallery_json|json_script:"gallery-sections-data" }}
+    {{ gallery_meta|json_script:"gallery-meta" }}
 {% else %}
     <p>{{ texts.no_samples }}</p>
 {% endif %}

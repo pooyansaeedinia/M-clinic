@@ -64,6 +64,7 @@ That document defines:
 - UI strings: `clinic/context_processors.py` → `UI_TEXTS` (never hardcode in templates)
 - Auth-required views: `@login_required` decorator
 - Static files: `static/clinic/` (project root — no collectstatic needed in development)
+- **Image uploads:** JPG, JPEG, PNG, WebP, and GIF (animated GIFs preserved). Shared validation in `clinic/validators.py` — use `validate_image_upload` and `ALLOWED_IMAGE_ACCEPT` on all image form fields and file inputs.
 
 ### Templates
 
@@ -84,6 +85,7 @@ That document defines:
 - Vanilla JS only in `static/clinic/`
 - Modals must respect `[hidden]` attribute (see DESIGN-LANGUAGE.md §6.6)
 - Gallery form field naming: `s{section}_{b|a}{index}_{field}` — map `b`→`before`, `a`→`after` in backend
+- **Gallery lightbox (`lightbox.js`):** case cards open the gallery modal; slide images open the nested preview lightbox. Open preview on the `click` event (not `pointerup`) so the synthesized click does not ghost-close the preview backdrop. Use pointer movement tracking to distinguish scroll drags from taps. CRUD overlays must use `pointer-events: none` when hidden. Preview closes only via backdrop, close button, or `Escape` — not dialog-padding clicks.
 
 ## Data Model (Gallery)
 
@@ -131,6 +133,7 @@ static/
   clinic/
     styles.css
     lightbox.js
+    procedure-search.js
     modal.js
     gallery-form.js
     flags/en.svg, tr.svg

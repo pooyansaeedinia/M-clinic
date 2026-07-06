@@ -14,11 +14,21 @@
 </section>
 
 <h2 class="section-title">{{ texts.procedures }}</h2>
-<section class="grid">
+<div class="procedure-search-wrap">
+    <label for="procedure-search" class="sr-only">{{ texts.search_procedures }}</label>
+    <input
+        type="search"
+        id="procedure-search"
+        class="procedure-search-input"
+        placeholder="{{ texts.search_placeholder }}"
+        autocomplete="off"
+    >
+</div>
+<section class="grid" id="procedure-grid">
     {% for card in cards %}
-        <article class="card card-clickable">
+        <article class="card card-clickable" data-procedure-name="{{ card.name }}">
             <a href="{% url 'procedure_detail' card.slug %}" class="card-stretched-link" aria-label="{{ card.name }}"></a>
-            <img src="{{ card.default_image.url }}" alt="{{ card.name }}">
+            <img src="{{ card.default_image.url }}" alt="{{ card.name }}" loading="lazy">
             <div class="card-content">
                 <span class="card-kicker">Procedure</span>
                 <h3>{{ card.name }}</h3>
@@ -29,7 +39,7 @@
             </div>
         </article>
     {% empty %}
-        <p>
+        <p class="procedure-grid-empty">
             {% if current_lang == 'tr' %}
                 Henuz islem eklenmedi.
             {% else %}
@@ -38,4 +48,5 @@
         </p>
     {% endfor %}
 </section>
+<p id="procedure-search-empty" class="procedure-search-empty" hidden>{{ texts.no_procedures_found }}</p>
 {% endblock %}

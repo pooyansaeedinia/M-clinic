@@ -118,7 +118,7 @@ Montserrat:wght@600;700;800
 | Pattern | CSS class | Columns |
 |---------|-----------|---------|
 | Procedure cards (home) | `.grid` | `repeat(auto-fill, minmax(250px, 1fr))` |
-| Before/After sections | `.pairs-grid` | **3 columns** desktop → 1 column mobile |
+| Before/After cases | `.cases-grid` | **3 columns** desktop → **2** tablet (≤1024px) → **1** mobile (≤860px) |
 | Images inside Before/After side | `.side-gallery-grid` | `repeat(auto-fill, minmax(120px, 1fr))` |
 
 ### 4.3 Border Radius
@@ -201,17 +201,29 @@ Procedure
 
 **Display:**
 
-- `.pairs-grid` — 3 sections per row
-- Each `.pair-section` has Before | After columns
-- Each image shows `.image-item-title` above thumb
-- Thumbs: `.gallery-thumb` with `aspect-ratio: 3/4`, `object-fit: cover`
+- `.cases-grid` — responsive case cards (3 / 2 / 1 columns)
+- Each `.case-card` shows first Before | After preview thumbs side by side
+- Clicking a card opens the gallery modal
+- Admin manage panel (authenticated only) via `.case-card-admin` `<details>`
 
-**Lightbox (`#image-lightbox`):**
+**Gallery modal (`#image-lightbox`):**
 
-- Opens on image click — must use `[hidden]` + `.lightbox[hidden] { display: none !important }`
-- Before/After toggle buttons in toolbar
-- Prev/next arrows + mouse wheel + keyboard arrows
-- Caption shows: `{title} - BEFORE/AFTER (n/total)`
+- Opens on case card click — must use `[hidden]` + `.lightbox[hidden] { display: none !important }`
+- Centered panel with generous outer whitespace (not edge-to-edge fullscreen)
+- Before/After toggle buttons in header — only button clicks switch mode
+- **Horizontal** scroll through images in the active section (`.lightbox-scroll`)
+- Each `.lightbox-slide`: image card + accent-bordered `.lightbox-caption`
+- Clicking a slide image opens the nested preview lightbox (`#image-preview-lightbox`, z-index 65)
+- Close via backdrop click, × button, or `Escape`
+- Body scroll locked via `.lightbox-open` on `<body>`
+- Smooth open/close transitions on panel and backdrop
+
+**Image preview lightbox (`#image-preview-lightbox`):**
+
+- Large single-image view for customer presentation
+- Elegant pill-style caption (Montserrat)
+- Close via backdrop, × button, or `Escape` (closes preview before main modal)
+- Smooth scale/fade open and close animations
 
 ### 6.6 Modals (`.app-modal`)
 
@@ -279,7 +291,7 @@ Procedure
 2. **Do not** inline styles in templates except unavoidable dynamic cases
 3. **Do not** add one-off hex colors — extend `:root` tokens first
 4. New components should reuse: `.btn`, `.form-card`, `.hero`, `.card`, `.pair-section`
-5. Modals/lightbox z-index stack: modals `55`, lightbox `60`, nav `20`
+5. Modals/lightbox z-index stack: modals `55`, gallery modal `60`, image preview `65`, nav `20`
 6. Hidden overlays **must** include `[hidden] { display: none !important }` when CSS sets `display: grid/flex`
 
 ---
@@ -288,7 +300,8 @@ Procedure
 
 | File | Responsibility |
 |------|----------------|
-| `lightbox.js` | Image preview, before/after toggle, scroll/arrows navigation |
+| `lightbox.js` | Fullscreen gallery modal, before/after mode toggle, vertical image scroll |
+| `procedure-search.js` | Instant case-insensitive procedure name filter on home page |
 | `modal.js` | Open/close app modals, body scroll lock |
 | `gallery-form.js` | Dynamic section/row add, field reindex on submit |
 
@@ -324,8 +337,8 @@ Keep JS vanilla — no framework required for UI interactions.
 ```
 templates/
   base.html                 # Shell, nav, footer, lightbox, scripts
-  clinic/home.html            # Procedure card grid
-  clinic/procedure_detail.html  # Before/after gallery sections
+  clinic/home.html            # Procedure card grid + search bar
+  clinic/procedure_detail.html  # Before/after case card grid
   clinic/manage_content.html  # Admin dashboard cards
   clinic/partials/modals.html # Add procedure / gallery modals
   clinic/partials/gallery_upload_fields.html
@@ -334,6 +347,7 @@ templates/
 static/clinic/
   styles.css                  # All design tokens & components
   lightbox.js
+  procedure-search.js
   modal.js
   gallery-form.js
   flags/en.svg, tr.svg

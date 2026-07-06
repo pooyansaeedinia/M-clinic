@@ -3,8 +3,11 @@ from collections import defaultdict
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseNotAllowed
+from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+
+from .context_processors import UI_TEXTS
 
 from .forms import ProcedureForm, SectionImageForm
 from .models import GallerySection, Procedure, SectionImage
@@ -70,15 +73,76 @@ def build_gallery_sections(procedure, lang):
     return sections
 
 
+def build_gallery_json(gallery_sections, procedure, user):
+    sections = []
+    for section in gallery_sections:
+        section_data = {'before': [], 'after': []}
+        for item in section['before_items']:
+            slide = {
+                'id': item['id'],
+                'src': item['image'].url,
+                'title': item['title'],
+            }
+            if user.is_authenticated:
+                slide['edit_url'] = reverse(
+                    'edit_procedure_image',
+                    kwargs={'slug': procedure.slug, 'image_id': item['id']},
+                )
+                slide['delete_url'] = reverse(
+                    'delete_procedure_image',
+                    kwargs={'slug': procedure.slug, 'image_id': item['id']},
+                )
+            section_data['before'].append(slide)
+
+        for item in section['after_items']:
+            slide = {
+                'id': item['id'],
+                'src': item['image'].url,
+                'title': item['title'],
+            }
+            if user.is_authenticated:
+                slide['edit_url'] = reverse(
+                    'edit_procedure_image',
+                    kwargs={'slug': procedure.slug, 'image_id': item['id']},
+                )
+                slide['delete_url'] = reverse(
+                    'delete_procedure_image',
+                    kwargs={'slug': procedure.slug, 'image_id': item['id']},
+                )
+            section_data['after'].append(slide)
+
+        sections.append(section_data)
+    return sections
+
+
+def build_gallery_meta(request, lang):
+    texts = UI_TEXTS[lang]
+    return {
+        'can_manage': request.user.is_authenticated,
+        'csrf_token': get_token(request),
+        'labels': {
+            'edit': texts['edit_image'],
+            'delete': texts['delete_image'],
+            'confirm_delete': texts['confirm_delete'],
+            'zoom_hint': texts['zoom_hint'],
+            'image_singular': texts['image_singular'],
+            'image_plural': texts['image_plural'],
+        },
+    }
+
+
 def procedure_detail(request, slug):
     lang = request.session.get('lang', 'en')
     procedure = get_object_or_404(Procedure, slug=slug)
     gallery_sections = build_gallery_sections(procedure, lang)
+    gallery_json = build_gallery_json(gallery_sections, procedure, request.user)
     context = {
         'procedure': procedure,
         'name': get_text(procedure, 'name', lang),
         'summary': get_text(procedure, 'summary', lang),
         'gallery_sections': gallery_sections,
+        'gallery_json': gallery_json,
+        'gallery_meta': build_gallery_meta(request, lang),
         'has_gallery': bool(gallery_sections),
     }
     return render(request, 'clinic/procedure_detail.html', add_shared_forms(request, context))

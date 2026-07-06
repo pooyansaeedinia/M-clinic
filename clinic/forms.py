@@ -1,9 +1,15 @@
 from django import forms
 
 from .models import GallerySection, Procedure, SectionImage
+from .validators import ALLOWED_IMAGE_ACCEPT, validate_image_upload
 
 
 class ProcedureForm(forms.ModelForm):
+    default_image = forms.ImageField(
+        validators=[validate_image_upload],
+        widget=forms.ClearableFileInput(attrs={'accept': ALLOWED_IMAGE_ACCEPT}),
+    )
+
     class Meta:
         model = Procedure
         fields = [
@@ -25,6 +31,11 @@ class ProcedureForm(forms.ModelForm):
 
 
 class SectionImageForm(forms.ModelForm):
+    image = forms.ImageField(
+        validators=[validate_image_upload],
+        widget=forms.ClearableFileInput(attrs={'accept': ALLOWED_IMAGE_ACCEPT}),
+    )
+
     class Meta:
         model = SectionImage
         fields = [
