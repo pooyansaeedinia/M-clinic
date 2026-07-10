@@ -1,6 +1,50 @@
 from django.contrib import admin
 
-from .models import GallerySection, Procedure, SectionImage
+from .models import (
+    ChatTemplateLanguage,
+    ChatTemplateSection,
+    GallerySection,
+    Procedure,
+    SectionImage,
+)
+
+
+@admin.register(ChatTemplateLanguage)
+class ChatTemplateLanguageAdmin(admin.ModelAdmin):
+    list_display = (
+        'name',
+        'language_name',
+        'code',
+        'sort_order',
+        'is_active',
+        'updated_at',
+    )
+    list_filter = ('is_active',)
+    search_fields = ('name', 'language_name', 'code')
+    prepopulated_fields = {'code': ('name',)}
+    fields = (
+        'name',
+        'language_name',
+        'code',
+        'image',
+        'sort_order',
+        'is_active',
+        'metadata',
+    )
+
+
+@admin.register(ChatTemplateSection)
+class ChatTemplateSectionAdmin(admin.ModelAdmin):
+    list_display = (
+        'title',
+        'language',
+        'template_type',
+        'sort_order',
+        'is_active',
+        'updated_at',
+    )
+    list_filter = ('language', 'template_type', 'is_active')
+    search_fields = ('title', 'body', 'category')
 
 
 class SectionImageInline(admin.TabularInline):

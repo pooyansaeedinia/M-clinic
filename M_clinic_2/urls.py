@@ -14,16 +14,36 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import sys
+
 from django.contrib import admin
 from django.conf import settings
-from django.conf.urls.static import static
-from django.urls import include, path
+from django.urls import include, path, re_path
+from django.views.static import serve
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('internal/', include('clinic.portal_urls')),
     path('', include('clinic.urls')),
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.BASE_DIR / 'static')
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# django.conf.urls.static.static() returns no patterns when DEBUG=False.
+# Serve assets during local runserver anyway so portal/public CSS both work.
+if settings.DEBUG or 'runserver' in sys.argv:
+    static_root = settings.STATICFILES_DIRS[0]
+    static_url = settings.STATIC_URL.lstrip('/')
+    urlpatterns += [
+        re_path(
+            rf'^{static_url}(?P<path>.*)$',
+            serve,
+            {'document_root': static_root},
+        ),
+    ]
+    media_url = settings.MEDIA_URL.lstrip('/')
+    urlpatterns += [
+        re_path(
+            rf'^{media_url}(?P<path>.*)$',
+            serve,
+            {'document_root': settings.MEDIA_ROOT},
+        ),
+    ]

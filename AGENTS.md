@@ -150,3 +150,39 @@ Templates still use: `{% static 'clinic/styles.css' %}`
 ## Allowed Hosts
 
 Default: `127.0.0.1,localhost,testserver` — override with `DJANGO_ALLOWED_HOSTS` env var.
+
+## Hidden Portal (Chat Templates)
+
+A separate internal UI lives at **`/internal/`** — it is **not linked** from the public site.
+
+| Path | Purpose |
+|------|---------|
+| `/internal/` | Portal login |
+| `/internal/dashboard/` | Language list (CRUD) |
+| `/internal/language/<code>/` | Template sections for a language |
+| `/internal/country/<code>/` | Alias of language page |
+| `/internal/logout/` | Sign out (POST) |
+| `/internal/api/languages/` | Language list/create (JSON) |
+| `/internal/api/languages/<id>/` | Language get/update/delete |
+| `/internal/api/languages/<id>/sections/` | Section list/create |
+| `/internal/api/sections/<id>/` | Section get/update/delete |
+
+**Architecture (keep separate from public MediClinic UI):**
+
+```
+clinic/portal.py              # Session auth, default languages/flags, decorator
+clinic/portal_views.py        # Login, dashboard, language CMS + JSON APIs
+clinic/portal_templates.py    # Language/section serialization & validation
+clinic/portal_urls.py         # Portal URLconf (included in M_clinic_2/urls.py only)
+clinic/models.py              # ChatTemplateLanguage, ChatTemplateSection
+templates/portal/             # Standalone templates (extend portal/base.html)
+templates/portal/partials/    # Reusable modals
+static/portal/                # Portal-only CSS + templates.js
+static/portal/languages/      # PNG/JPG language card images
+```
+
+- Portal auth uses session key `portal_authenticated` — **not** Django `User` auth.
+- Do not extend `templates/base.html` or reuse `static/clinic/styles.css` for portal pages.
+- Languages are DB-managed (`ChatTemplateLanguage`: name, language_name, code, image). Card images are PNG/JPG under `static/portal/languages/` with upload/replace/remove in the language modal. English is always sorted first. Defaults seed from `DEFAULT_LANGUAGES` in `clinic/portal.py`.
+- Sections (`ChatTemplateSection`: title + body) use modal CRUD via JSON APIs; extend with `metadata` / `tags` / `variables` / `template_type` when needed.
+- Portal static files live in `static/portal/`. With `DEBUG=False`, run `python manage.py collectstatic` before production deploy so `/static/portal/` assets are included in `staticfiles/`.

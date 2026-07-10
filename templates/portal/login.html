@@ -1,0 +1,33 @@
+{% extends 'portal/base.html' %}
+
+{% block title %}Sign In — Chat Templates{% endblock %}
+{% block body_class %}portal-body--login{% endblock %}
+
+{% block content %}
+<main class="portal-login">
+    <div class="portal-login-card">
+        <div class="portal-login-brand">
+            <span class="portal-login-badge">Internal</span>
+            <h1>Chat Templates</h1>
+            <p>Sign in to access the dashboard.</p>
+        </div>
+
+        {% if error %}
+            <div class="portal-alert" role="alert">{{ error }}</div>
+        {% endif %}
+
+        <form method="post" class="portal-login-form" novalidate>
+            {% csrf_token %}
+            <label class="portal-field">
+                <span>Username</span>
+                <input type="text" name="username" autocomplete="username" required>
+            </label>
+            <label class="portal-field">
+                <span>Password</span>
+                <input type="password" name="password" autocomplete="current-password" required>
+            </label>
+            <button type="submit" class="portal-btn portal-btn-primary">Sign In</button>
+        </form>
+    </div>
+</main>
+{% endblock %}

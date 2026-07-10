@@ -1,0 +1,35 @@
+{# Reusable portal CMS modals — form + confirm #}
+<div class="portal-modal" id="portal-form-modal" hidden>
+    <div class="portal-modal-backdrop" data-modal-dismiss></div>
+    <div class="portal-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="portal-form-modal-title">
+        <header class="portal-modal-header">
+            <h2 id="portal-form-modal-title">Edit</h2>
+            <button type="button" class="portal-modal-close" data-modal-dismiss aria-label="Close">&times;</button>
+        </header>
+        <form class="portal-modal-form" id="portal-form-modal-form" novalidate>
+            <div class="portal-modal-body" id="portal-form-modal-fields"></div>
+            <div class="portal-form-error" id="portal-form-modal-error" hidden></div>
+            <footer class="portal-modal-footer">
+                <button type="button" class="portal-btn portal-btn-secondary" data-modal-dismiss>Cancel</button>
+                <button type="submit" class="portal-btn portal-btn-primary" id="portal-form-modal-submit">Save</button>
+            </footer>
+        </form>
+    </div>
+</div>
+
+<div class="portal-modal" id="portal-confirm-modal" hidden>
+    <div class="portal-modal-backdrop" data-modal-dismiss></div>
+    <div class="portal-modal-dialog portal-modal-dialog--sm" role="dialog" aria-modal="true" aria-labelledby="portal-confirm-modal-title">
+        <header class="portal-modal-header">
+            <h2 id="portal-confirm-modal-title">Confirm</h2>
+            <button type="button" class="portal-modal-close" data-modal-dismiss aria-label="Close">&times;</button>
+        </header>
+        <div class="portal-modal-body">
+            <p id="portal-confirm-modal-message">Are you sure?</p>
+        </div>
+        <footer class="portal-modal-footer">
+            <button type="button" class="portal-btn portal-btn-secondary" data-modal-dismiss>Cancel</button>
+            <button type="button" class="portal-btn portal-btn-danger" id="portal-confirm-modal-confirm">Delete</button>
+        </footer>
+    </div>
+</div>

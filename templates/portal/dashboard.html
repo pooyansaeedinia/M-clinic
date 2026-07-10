@@ -1,0 +1,83 @@
+{% extends 'portal/base.html' %}
+{% load static %}
+
+{% block title %}Chat Templates — Dashboard{% endblock %}
+{% block body_class %}portal-body--dashboard{% endblock %}
+
+{% block content %}
+<div class="portal-shell">
+    <header class="portal-topbar">
+        <div class="portal-topbar-main">
+            <span class="portal-topbar-kicker">Internal Dashboard</span>
+            <h1>Chat Templates</h1>
+        </div>
+        <form method="post" action="{% url 'portal_logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="portal-btn portal-btn-ghost">Sign Out</button>
+        </form>
+    </header>
+
+    <main class="portal-main">
+        <section class="portal-cms-section" data-portal-languages>
+            <div class="portal-section-header">
+                <div>
+                    <h2 class="portal-section-title">Languages</h2>
+                    <p class="portal-section-desc">Manage languages, then open one to edit its chat templates.</p>
+                </div>
+                <button type="button" class="portal-btn portal-btn-primary" data-action="create-language">
+                    Add Language
+                </button>
+            </div>
+
+            <div class="portal-country-grid" data-language-grid>
+                {% for language in languages %}
+                    <article class="portal-lang-card portal-lang-card--flag" data-language-id="{{ language.id }}" data-language-code="{{ language.code }}">
+                        <a href="{% url 'portal_language' language.code %}" class="portal-lang-card-link">
+                            <div class="portal-country-flag">
+                                {% if language.image %}
+                                    <img src="{{ language.image.url }}" alt="{{ language.name }}">
+                                {% else %}
+                                    <div class="portal-flag-placeholder">{{ language.name|first }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="portal-country-meta">
+                                <h2>{{ language.name }}</h2>
+                                <p>{{ language.section_count }} section{{ language.section_count|pluralize }}</p>
+                            </div>
+                        </a>
+                        <div class="portal-card-actions">
+                            <button type="button" class="portal-btn portal-btn-secondary portal-btn-sm" data-action="edit-language" data-id="{{ language.id }}">Edit</button>
+                            <button type="button" class="portal-btn portal-btn-danger portal-btn-sm" data-action="delete-language" data-id="{{ language.id }}" data-name="{{ language.name }}">Delete</button>
+                        </div>
+                    </article>
+                {% empty %}
+                    <div class="portal-empty" data-languages-empty>
+                        <div class="portal-empty-icon" aria-hidden="true">◇</div>
+                        <h3>No languages yet</h3>
+                        <p>Create a language to start organizing chat templates.</p>
+                        <button type="button" class="portal-btn portal-btn-primary" data-action="create-language">Add Language</button>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+</div>
+
+{% include 'portal/partials/modals.html' %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    window.PORTAL_CONFIG = {
+        page: 'dashboard',
+        staticUrl: '{% static "" %}',
+        languageImageAccept: '{{ language_image_accept }}',
+        urls: {
+            languages: '{% url "portal_api_languages" %}',
+            languageDetail: '{% url "portal_api_language_detail" 0 %}'.replace('/0/', '/{id}/'),
+            languagePage: '{% url "portal_language" "CODE" %}'.replace('CODE', '{code}'),
+        },
+    };
+</script>
+<script src="{% static 'portal/templates.js' %}"></script>
+{% endblock %}

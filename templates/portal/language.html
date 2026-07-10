@@ -1,0 +1,93 @@
+{% extends 'portal/base.html' %}
+{% load static %}
+
+{% block title %}{{ language.name }} — Chat Templates{% endblock %}
+{% block body_class %}portal-body--dashboard{% endblock %}
+
+{% block content %}
+<div class="portal-shell">
+    <header class="portal-topbar portal-topbar--compact">
+        <div class="portal-topbar-main">
+            <a href="{% url 'portal_dashboard' %}" class="portal-back-link">← Back to Dashboard</a>
+            <h1>{{ language.name }}</h1>
+            <p class="portal-topbar-sub">
+                {% if language.language_name %}{{ language.language_name }} chat templates{% else %}Chat templates{% endif %}
+            </p>
+        </div>
+        <form method="post" action="{% url 'portal_logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="portal-btn portal-btn-ghost">Sign Out</button>
+        </form>
+    </header>
+
+    <main class="portal-main portal-main--language" data-portal-sections data-language-id="{{ language.id }}">
+        <section class="portal-cms-section">
+            <div class="portal-section-header portal-section-header--stack">
+                <div>
+                    <h2 class="portal-section-title">Template Sections</h2>
+                    <p class="portal-section-desc">
+                        Reusable messages{% if language.language_name %} for {{ language.language_name }}{% endif %}.
+                    </p>
+                </div>
+                <div class="portal-toolbar">
+                    <label class="portal-search">
+                        <span class="visually-hidden">Search sections</span>
+                        <input type="search" placeholder="Search by title…" data-section-search autocomplete="off">
+                    </label>
+                    <button type="button" class="portal-btn portal-btn-primary" data-action="create-section">
+                        Add Section
+                    </button>
+                </div>
+            </div>
+
+            <div class="portal-section-list" data-section-list>
+                {% for section in sections %}
+                    <article
+                        class="portal-section-card"
+                        data-section-id="{{ section.id }}"
+                        data-search="{{ section.title|lower }}"
+                    >
+                        <div class="portal-section-card-body">
+                            <h3>{{ section.title }}</h3>
+                            <p class="portal-section-preview">{{ section.body }}</p>
+                        </div>
+                        <div class="portal-card-actions">
+                            <button type="button" class="portal-btn portal-btn-secondary portal-btn-sm" data-action="copy-section" data-body="{{ section.body }}">Copy</button>
+                            <button type="button" class="portal-btn portal-btn-secondary portal-btn-sm" data-action="edit-section" data-id="{{ section.id }}">Edit</button>
+                            <button type="button" class="portal-btn portal-btn-danger portal-btn-sm" data-action="delete-section" data-id="{{ section.id }}" data-name="{{ section.title }}">Delete</button>
+                        </div>
+                    </article>
+                {% empty %}
+                    <div class="portal-empty" data-sections-empty>
+                        <div class="portal-empty-icon" aria-hidden="true">◇</div>
+                        <h3>No sections yet</h3>
+                        <p>Add your first template section{% if language.language_name %} for {{ language.language_name }}{% endif %}.</p>
+                        <button type="button" class="portal-btn portal-btn-primary" data-action="create-section">Add Section</button>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="portal-empty portal-empty--filtered" data-sections-filtered hidden>
+                <h3>No matching sections</h3>
+                <p>Try a different search term.</p>
+            </div>
+        </section>
+    </main>
+</div>
+
+{% include 'portal/partials/modals.html' %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    window.PORTAL_CONFIG = {
+        page: 'language',
+        languageId: {{ language.id }},
+        urls: {
+            sections: '{% url "portal_api_language_sections" language.id %}',
+            sectionDetail: '{% url "portal_api_section_detail" 0 %}'.replace('/0/', '/{id}/'),
+        },
+    };
+</script>
+<script src="{% static 'portal/templates.js' %}"></script>
+{% endblock %}
