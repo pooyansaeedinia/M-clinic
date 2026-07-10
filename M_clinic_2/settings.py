@@ -105,6 +105,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://nasimmehrzad.com",
+    "https://www.nasimmehrzad.com",
+]
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
